@@ -1,0 +1,216 @@
+/* CSS Específico para el Layout Lateral Total (Dashboard2) */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    max-width: 100%; /* Ocupa todo el ancho */
+    padding: 0;
+    margin: 0;
+    gap: 0;
+    background-color: var(--bg-body); /* Fondo global detrás del sidebar y content */
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--white);
+    border-right: 1px solid var(--border);
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: fixed; /* Fijo a la izquierda */
+    height: calc(100vh - 25px); /* Restamos el top para el alto total */
+    top: 25px; /* Empieza un poco más abajo para formar el margen superior global */
+    border-top-right-radius: 15px; /* Redondeamos solo la esquina superior derecha del sidebar para que concuerde visualmente */
+    overflow-y: auto;
+    z-index: 100;
+}
+
+/* Estructura del contenido desplazado por el sidebar fijo */
+.content {
+    flex: 1;
+    margin-left: 250px; /* Igual al ancho del sidebar */
+    padding: 25px 25px; /* Margin superior coincidente con el del sidebar */
+    max-width: calc(100% - 250px);
+    background-color: transparent; /* El color de fondo global ya está en .dashboard-container */
+    height: 100vh;
+    overflow-y: auto; /* El scroll ahora vive en el contenido principal exclusivamente */
+    box-sizing: border-box; /* Para que el padding no rompa la altura total */
+}
+
+/* En el nuevo diseño de sidebar fijo, no aplicamos margen extra superior para no romper el alineamiento */
+.content > .card {
+    margin-top: 0 !important;
+    min-height: calc(100vh - 50px); /* Hace que la tarjeta ocupe el alto completo menos el padding */
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Botones de navegación en forma de lista vertical */
+.tabs-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    margin-top: 10px;
+    flex-grow: 1;
+}
+
+.btn-tab {
+    padding: 12px 15px;
+    background-color: transparent;
+    color: var(--text-main);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: left;
+    transition: all 0.2s ease;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+}
+
+.btn-tab:hover {
+    background-color: var(--bg-zebra);
+    opacity: 1;
+    transform: none; /* Quitamos salto vertical */
+}
+
+.btn-tab.active {
+    opacity: 1;
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.sidebar-logout {
+    width: 100%;
+    text-align: center;
+    opacity: 1;
+    display: block;
+}
+
+.container, .informe-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- MENÚ MÓVIL Y HAMBURGUESA --- */
+.mobile-top-bar {
+    display: none; /* Oculto en PC */
+    background-color: var(--white);
+    padding: 10px 15px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.hamburger-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--text-main);
+    cursor: pointer;
+    padding: 5px;
+}
+
+.mobile-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 99;
+}
+
+@media (max-width: 768px) {
+    .mobile-top-bar {
+        display: flex;
+    }
+    .dashboard-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        /* Transformar a Menú Desplegable (Lateral) */
+        position: fixed;
+        left: -300px; /* Escondido por defecto */
+        top: 61px; /* Para que empiece justo debajo de la barra superior */
+        width: 250px;
+        height: calc(100vh - 61px); /* Ajustado para no sobrepasar la pantalla */
+        z-index: 101; /* Arriba del overlay, pero bajo la barra (z-index 1000) */
+        background-color: var(--white);
+        border-top-right-radius: 0;
+        transition: left 0.3s ease;
+        padding: 10px 10px; /* Eliminar excesos de padding */
+        padding-bottom: 80px; /* Darle respiro abajo más grande por el botón flotante */
+        box-sizing: border-box; /* Previene que padding infle la altura */
+        overflow-y: auto; /* Permite scroll si la pantalla es enana */
+        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        gap: 0 !important; /* Quitar gap global para controlar el espaciado manual */
+    }
+    .sidebar.open {
+        left: 0; /* Aparece */
+    }
+    .sidebar-overlay.active {
+        display: block; /* Muestra fondo semitransparente */
+    }
+    .tabs-nav {
+        width: 100%;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        flex-grow: 0; /* Evitar que los botones se separen exageradamente */
+        gap: 0; /* Sin hueco entre botones */
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    
+    .btn-tab {
+        text-align: left;
+        justify-content: flex-start;
+        padding: 10px 15px; /* Botones apenas más finos */
+        font-size: 0.95rem;
+    }
+    .content {
+        margin-left: 0;
+        padding: 10px 10px; /* Menos padding en móvil para aprovechar al máximo */
+        max-width: 100%;
+        height: auto; /* Restablecer en movil */
+        overflow-y: visible;
+    }
+
+    #desktop-logo {
+        display: none !important; /* Ocultamos el logo del sidebar porque ya está en la barra superior */
+    }
+    .sidebar-user-header {
+        padding-top: 5px !important;
+        padding-bottom: 10px !important;
+        margin-bottom: 5px !important;
+    }
+}

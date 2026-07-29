@@ -1,0 +1,16 @@
+{
+  "name": "gestion-espacios",
+  "version": "4.9.17",
+    "description": "Sistema de turnos con Google Calendar",
+    "main": "index.html",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+      "@netlify/functions": "^2.6.0",
+      "googleapis": "^126.0.0",
+      "jsonwebtoken": "^9.0.2"
+    },
+    "author": "",
+    "license": "ISC"
+  }

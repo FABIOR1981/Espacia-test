@@ -1,0 +1,231 @@
+/* ==========================================================================
+   SISTEMA DE DISEÑO ESPACIA - MÓDULO DE INFORMES
+   ========================================================================== */
+
+/* No redefinir :root para evitar collisions con el tema global; reutilizar variables de 1_comunes.css */
+
+.informe-module {
+    /* Vars específicas de este módulo si se necesita anular localmente */
+}
+
+/* Variables del módulo Informe (no redefinir :root) */
+.informe-container {
+    --score-blue: linear-gradient(135deg, #1e88e5 0%, #64b5f6 100%);
+    --score-amber: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    --score-green: linear-gradient(135deg, #388e3c 0%, #81c784 100%);
+    --score-red: linear-gradient(135deg, #d32f2f 0%, #e57373 100%);
+    --score-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --radius-lg: 12px;
+
+    /* Colores para badges (fáciles de ajustar) */
+    --badge-blue: #e0f2fe; --badge-blue-text: #0369a1;
+    --badge-amber: #fff7ed; --badge-amber-text: #92400e;
+    --badge-green: #dcfce7; --badge-green-text: #15803d;
+    --badge-red: #fee2e2; --badge-red-text: #b91c1c;
+}
+
+/* --- Layout del Grid --- */
+.scorecard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+/* --- Tarjetas de Estadísticas (Scorecards) --- */
+.card-stat {
+    background: var(--score-blue);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--score-shadow);
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+    .card-stat.green {
+        background: var(--score-green);
+    }
+    .card-stat.red {
+        background: var(--score-red);
+    }
+    .card-stat.amber {
+        background: var(--score-amber);
+    }
+    /* Paleta de colores para Scorecards (variables definidas en .informe-container) */
+    .scorecard-grid {
+        /* variables tomadas desde .informe-container */
+    }
+/* Contenido Principal de la Tarjeta */
+.card-stat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.card-stat-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    opacity: 0.9;
+    margin-bottom: -2px;
+}
+
+.card-stat-time {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+}
+
+.card-stat-count {
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
+/* Desglose Lateral (60m / 90m) */
+.card-stat-desglose {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    border-left: 1px solid rgba(255, 255, 255, 0.22);
+    padding-left: 8px;
+    margin-left: 6px;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+/* Compact layout: put time and desglose in same row */
+.card-stat .card-stat-time, .card-stat .card-stat-desglose {
+    display: inline-block;
+    vertical-align: middle;
+}
+.card-stat .card-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Formulario de Filtros --- */
+.informe-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: var(--white);
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    align-items: center;
+}
+
+.informe-form label {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.informe-form input, 
+.informe-form select {
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.informe-form input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.1);
+}
+
+/* --- Tabla de Resultados --- */
+.table-main-container {
+    overflow-x: auto;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.custom-table th {
+    background: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid var(--border);
+}
+
+.custom-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-main);
+}
+
+/* Badges de Estado */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.status-badge.pendiente { background: var(--badge-blue); color: var(--badge-blue-text); }
+.status-badge.consumida { background: var(--badge-green); color: var(--badge-green-text); }
+/* backward compatibility: keep `.reservada` and `.usada` as aliases for older code */
+.status-badge.reservada { background: var(--badge-blue); color: var(--badge-blue-text); }
+.status-badge.usada { background: var(--badge-green); color: var(--badge-green-text); }
+.status-badge.cancelada { background: var(--badge-red); color: var(--badge-red-text); }
+
+/* --- Paginación --- */
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.pagination button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* --- Responsividad --- */
+@media (max-width: 900px) {
+    .scorecard-grid { grid-template-columns: 1fr; gap: 10px; }
+    .informe-form { flex-direction: column; align-items: stretch; }
+    .card-stat-time { font-size: 1.2rem; }
+    .card-stat-desglose { font-size: 0.85rem; }
+}
+
+@media (max-width: 480px) {
+    .card-stat { padding: 8px 10px; }
+    .card-stat-time { font-size: 1rem; }
+}

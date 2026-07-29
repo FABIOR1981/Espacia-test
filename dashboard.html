@@ -1,0 +1,373 @@
+<script type="module">
+import { SHOW_UPDATE_MODAL } from './js/config.js';
+if ('serviceWorker' in navigator && SHOW_UPDATE_MODAL) {
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+        document.getElementById('updateModal').style.display = 'block';
+    });
+}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+        document.getElementById('updateModal').style.display = 'block';
+    });
+}
+</script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="theme-color" content="#2E7D32">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="imagenes/icon-192.png">
+    <title>Espacia</title>
+    <link rel="stylesheet" href="css/1_comunes.css">
+    <link rel="stylesheet" href="css/2_dashboard.css">
+</head>
+<body class="theme-classic">
+    <!-- Barra Superior Móvil -->
+    <div class="mobile-top-bar" id="mobile-top-bar">
+        <button class="hamburger-btn" id="hamburger-btn">☰</button>
+        <div class="mobile-logo" style="display: flex; align-items: center;">
+            <img src="imagenes/logo_demaria.png" alt="Logo de Maria Consultorios" style="height: 40px; object-fit: contain;">
+        </div>
+    </div>
+    <!-- Fondo oscuro que aparece al abrir menú móvil -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- Modal actualización de versión -->
+        <div id="updateModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:9999;">
+            <div style="background:#fff; padding:2em; margin:10% auto; width:300px; border-radius:8px; text-align:center;">
+                <h2>¡Nueva versión disponible!</h2>
+                <p>Recarga la página para actualizar Espacia.</p>
+                <button onclick="location.reload()">Recargar</button>
+            </div>
+        </div>
+        <div class="dashboard-container">
+        
+        <!-- Sidebar Izquierdo Completo -->
+        <aside class="sidebar" id="sidebar-menu">
+            <div class="sidebar-user-header" style="text-align: center; padding-top: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
+                <!-- Logo del Consultorio -->
+                <div id="desktop-logo" style="margin-bottom: 15px; display: flex; justify-content: center; width: 100%;">
+                    <img src="imagenes/logo_demaria.png" alt="Logo de Maria Consultorios" style="height: 70px; object-fit: contain;">
+                </div>
+                <!-- Nombre del Usuario Logueado (Ej. Fabio Roberto) -->
+                <div id="user-email" style="display:block; font-size: 1.1rem; color: var(--primary); font-weight: bold;">Cargando usuario...</div>
+            </div>
+
+            <!-- Botonera tipo Lista Vertical -->
+
+
+                <div id="dashboard-btns" style="display: flex; flex-direction: column;">
+                <div class="menu-nav tabs-nav">
+                    <button class="btn-tab active" id="btn-agenda-v2">📅 Agenda</button>
+                    <button class="btn-tab" id="btn-reservas">🕰️ Reservas</button>
+                    <button class="btn-tab" id="btn-informe">📊 Informe</button>
+                    <button class="btn-tab" id="btn-abmusu2">👥 ABM Usuarios</button>
+                    <button class="btn-tab" id="btn-bloqueo-horarios" style="display:none;">🔒 Bloqueo</button>
+                          <button class="btn-tab" id="btn-cuponera" style="display: none;">🎟️ Cuponera</button>
+                </div>
+            </div>
+
+            <!-- Boton Cerrar Sesion Abajo de Todo -->
+            <div class="bottom-actions" style="margin-top: 10px; padding-top: 15px; border-top: 1px solid var(--border); margin-bottom: 5px;">
+                <button id="logout-btn" class="btn-secondary sidebar-logout" style="width: 100%; border: 1px solid var(--primary); color: var(--primary); padding: 10px; font-weight: bold; background: transparent; cursor: pointer; border-radius: 8px; margin-bottom: 8px;">🚪 Cerrar Sesión</button>
+                <div style="text-align: center; margin-bottom: 8px; font-size: 0.75rem; color: #888;">
+                    <span class="app-version-display">v-.-.-</span>
+                </div>
+                <button id="instalar-pwa-btn" style="width: 100%; border: none; background-color: #28a745; color: white; padding: 10px; font-weight: bold; cursor: pointer; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">📲 Instalar App</button>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal Expandido -->
+        <main class="content">
+            <!-- Header Superior Minimizado / Oculto -->
+            <div class="main-header" style="display: none;">
+                <h1 id="welcome-msg" style="margin: 0; font-size: 2rem;">Cargando...</h1>
+                <div class="logo-top-right" style="display: flex; align-items: center; justify-content: center; height: 50px; width: 140px;">
+                    <img src="imagenes/logo_demaria.png" alt="Logo de Maria Consultorios" style="height: 100%; max-width: 100%; object-fit: contain;">
+                </div>
+            </div>
+
+            <section id="admin-section" style="display: none;" class="card admin-card">
+                <h2>📊 Reportes Generales</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">Agendadas: <span id="count-agendadas">0</span></div>
+                    <div class="stat-item">Canceladas: <span id="count-canceladas">0</span></div>
+                    <div class="stat-item">Anuladas: <span id="count-anuladas">0</span></div>
+                </div>
+            </section>
+
+            <section id="agenda-v2-section" class="card" style="display:none;">
+                <div id="agenda-v2-container"></div>
+            </section>
+            <section id="reservas-section" class="card" style="display:none;">
+                <div id="reservas-container"></div>
+            </section>
+            <section id="informe-section" class="card" style="display:none;">
+                <div id="informe-container"></div>
+            </section>
+            <section id="abmusu2-section" class="card" style="display:none;">
+                <div id="abmusu2-container"></div>
+            </section>
+            <section id="bloqueo-section" class="card" style="display:none;">
+                <div id="bloqueo-container"></div>
+            </section>
+                <section id="cuponera-section" class="card" style="display:none;">
+                    <div id="cuponera-container"></div>
+                </section>
+        </main>
+    </div>
+
+    <!-- Selector de temas flotante (Solo Desarrollo) -->
+    <div class="theme-selector-container" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; font-family: var(--font-family, sans-serif);">
+        <div id="themeMenu" class="theme-menu" style="position: absolute; bottom: 100%; left: 0; margin-bottom: 10px; background: var(--white, white); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); overflow: hidden; display: none; flex-direction: column; min-width: 200px; border: 1px solid var(--border, #eee);">
+            <button class="theme-option" data-theme="modern" style="padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 0.95rem; color: var(--text-main, #333); display: flex; align-items: center; gap: 10px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #2E7D32;"></span> Verde Bosque
+            </button>
+            <button class="theme-option" data-theme="warm" style="padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 0.95rem; color: var(--text-main, #333); display: flex; align-items: center; gap: 10px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #D97757;"></span> Cálido y Acogedor
+            </button>
+            <button class="theme-option" data-theme="ocean" style="padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 0.95rem; color: var(--text-main, #333); display: flex; align-items: center; gap: 10px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #0284C7;"></span> Océano
+            </button>
+            <button class="theme-option" data-theme="lavender" style="padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 0.95rem; color: var(--text-main, #333); display: flex; align-items: center; gap: 10px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #7C3AED;"></span> Lavanda
+            </button>
+            <button class="theme-option" data-theme="sunset" style="padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 0.95rem; color: var(--text-main, #333); display: flex; align-items: center; gap: 10px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #EA580C;"></span> Atardecer (Cálido)
+            </button>
+            <button class="theme-option" data-theme="minimalist" style="padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 0.95rem; color: var(--text-main, #333); display: flex; align-items: center; gap: 10px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #57534E;"></span> Minimalista
+            </button>
+            <button class="theme-option" data-theme="mustard" style="padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 0.95rem; color: var(--text-main, #333); display: flex; align-items: center; gap: 10px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #CA8A04;"></span> Mostaza
+            </button>
+           <!-- <button class="theme-option" data-theme="dark" style="padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 0.95rem; color: var(--text-main, #333); display: flex; align-items: center; gap: 10px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #0F172A;"></span> Modo Oscuro
+            </button>
+            <button class="theme-option" data-theme="astigmatismo" style="padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 0.95rem; color: var(--text-main, #333); display: flex; align-items: center; gap: 10px;">
+                <span style="width: 12px; height: 12px; border-radius: 50%; background: #2A2A35;"></span> Oscuro (Astigmatismo)
+            </button>-->
+        </div>
+        <button id="themeToggle" style="background: var(--primary); color: white; border: none; border-radius: 50px; padding: 10px 20px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px;">
+            🎨 Probar Diseños
+        </button>
+    </div>
+
+    <!-- Time Indicator: línea de tiempo actual -->
+    <script src="js/components/TimeIndicator.js"></script>
+    <!-- Script idéntico al dashboard normal (que cargará todos tus JS) -->
+    <script type="module" src="js/dashboard.js"></script>
+    <script>
+        // Registrar el Service Worker (NECESARIO PARA QUE EL NAVEGADOR PERMITA INSTALAR)
+        let refreshing = false;
+
+        function promptForUpdate(registration) {
+            if (window.confirm('Hay una nueva versión disponible. ¿Deseas recargar ahora para actualizar?')) {
+                if (registration.waiting) {
+                    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                }
+            }
+        }
+
+        function trackInstalling(worker, registration) {
+            worker.addEventListener('statechange', () => {
+                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                    promptForUpdate(registration);
+                }
+            });
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('ServiceWorker registrado con éxito en el scope: ', registration.scope);
+                    if (registration.waiting) {
+                        promptForUpdate(registration);
+                    }
+                    if (registration.installing) {
+                        trackInstalling(registration.installing, registration);
+                    }
+                    registration.addEventListener('updatefound', () => {
+                        trackInstalling(registration.installing, registration);
+                    });
+                }, function(err) {
+                    console.log('ServiceWorker falló al registrarse: ', err);
+                });
+
+                navigator.serviceWorker.addEventListener('controllerchange', function() {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
+            });
+        }
+
+        // Lógica para el selector de temas
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('themeToggle');
+            const themeMenu = document.getElementById('themeMenu');
+            const themeOptions = document.querySelectorAll('.theme-option');
+            const body = document.body;
+            
+            function applyTheme(themeName) {
+                body.classList.remove('theme-modern', 'theme-blue', 'theme-dark', 'theme-warm', 'theme-pisama', 'theme-ocean', 'theme-lavender', 'theme-sunset', 'theme-minimalist', 'theme-mustard', 'theme-astigmatismo');
+                if (themeName !== 'classic') body.classList.add(`theme-${themeName}`);
+                localStorage.setItem('espacia_theme', themeName);
+                
+                themeOptions.forEach(opt => {
+                    opt.style.fontWeight = opt.dataset.theme === themeName ? 'bold' : 'normal';
+                    opt.style.background = opt.dataset.theme === themeName ? '#f0f7ff' : 'none';
+                });
+                
+                document.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: themeName } }));
+
+                // Actualizar el color de la barra de la PWA
+                setTimeout(() => {
+                    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+                    if (metaThemeColor) {
+                        const computedColor = getComputedStyle(document.body).getPropertyValue('--primary').trim();
+                        metaThemeColor.setAttribute('content', computedColor || '#2E7D32');
+                    }
+                }, 50);
+            }
+
+            const savedTheme = localStorage.getItem('espacia_theme') || 'classic';
+            applyTheme(savedTheme);
+
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                themeMenu.style.display = themeMenu.style.display === 'flex' ? 'none' : 'flex';
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!themeMenu.contains(e.target) && e.target !== toggleBtn) {
+                    themeMenu.style.display = 'none';
+                }
+            });
+
+            themeOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    applyTheme(option.dataset.theme);
+                    themeMenu.style.display = 'none';
+                });
+            });
+            
+            // Si ya está funcionando como App independiente, no mostrar el botón
+            window.addEventListener('appinstalled', () => {
+                const btn = document.getElementById('instalar-pwa-btn');
+                if(btn) btn.style.display = 'none';
+                window.deferredPrompt = null;
+            });
+        });
+
+        // ==========================================
+        // Lógica PWA a nivel global (Evita perder el evento)
+        // ==========================================
+        window.deferredPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Previene el infobar por defecto de Chrome
+            e.preventDefault();
+            // Guarda el evento para poder dispararlo luego 
+            window.deferredPrompt = e;
+            console.log('✅ Evento beforeinstallprompt capturado. Listo para instalar.');
+            
+            // Intenta actualizar el botón si ya cargó en el DOM
+            const btn = document.getElementById('instalar-pwa-btn');
+            if (btn) btn.innerHTML = '📲 Instalar App (Listo)';
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnInstalar = document.getElementById('instalar-pwa-btn');
+
+            // --- Lógica del Menú Hamburguesa en Móvil ---
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const sidebarMenu = document.getElementById('sidebar-menu');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const btnTabs = document.querySelectorAll('.btn-tab');
+
+            function toggleMenu() {
+                sidebarMenu.classList.toggle('open');
+                sidebarOverlay.classList.toggle('active');
+            }
+
+            if (hamburgerBtn && sidebarMenu && sidebarOverlay) {
+                hamburgerBtn.addEventListener('click', toggleMenu);
+                sidebarOverlay.addEventListener('click', toggleMenu);
+                
+                // Cerrar menú al hacer clic en cualquier opción (en móvil)
+                btnTabs.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        if (window.innerWidth <= 768 && sidebarMenu.classList.contains('open')) {
+                            toggleMenu();
+                        }
+                    });
+                });
+            }
+            // ---------------------------------------------
+            
+            // 🛑 Ocultar el botón OBLIGATORIAMENTE si la app ya está instalada y ejecutándose conectada a la PWA o pantalla completa
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                                 window.navigator.standalone || 
+                                 document.referrer.includes('android-app://') ||
+                                 (window.matchMedia('(display-mode: window-controls-overlay)').matches);
+
+            if (isStandalone && btnInstalar) {
+                btnInstalar.style.display = 'none';
+                return; // Corta la ejecución aquí si es standalone
+            }
+
+            // Otra validación: detectar si estamos en PC como App instalada revisando el window.matchMedia y navigator.standalone no siempre es suficiente
+            // Algunos navegadores de escritorio inyectan su propio display-mode. Y outerHeight en PC no siempre es fiable si uno reescala la ventana de la PWA.
+            
+            // Detectar iOS (Safari)
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIOS && btnInstalar) {
+                btnInstalar.innerHTML = '🍎 Instalar en iOS';
+                btnInstalar.style.backgroundColor = '#007AFF'; // Azul tipo Apple
+            } else if (window.deferredPrompt && btnInstalar) {
+                btnInstalar.innerHTML = '📲 Instalar App (Listo)';
+            }
+            
+            if (btnInstalar) {
+                btnInstalar.addEventListener('click', async () => {
+                    if (isIOS) {
+                        alert("📲 Para instalar en tu iPhone/iPad:\n\n1. Toca el botón 'Compartir' (el cuadrado con la flecha hacia arriba en la barra inferior).\n2. Selecciona 'Agregar a Inicio' ➕.\n3. Confirma arriba a la derecha.");
+                        return;
+                    }
+                    
+                    if (window.deferredPrompt) {
+                        try {
+                            window.deferredPrompt.prompt();
+                            const { outcome } = await window.deferredPrompt.userChoice;
+                            if (outcome === 'accepted') {
+                                console.log('✅ El usuario aceptó instalar la app');
+                                btnInstalar.style.display = 'none';
+                            }
+                            window.deferredPrompt = null;
+                        } catch (err) {
+                            console.error('Error lanzando el prompt:', err);
+                        }
+                    } else {
+                        alert("⚠️ No recibimos el aviso de instalación. Requisitos: 1. No estar en Modo Incógnito. 2. URL con HTTPS. 3. Haber interactuado con la página. Si estás en iPhone usa Compartir > Agregar al Inico.");
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+<script type="module">
+import { SHOW_UPDATE_MODAL } from './js/config.js';
+if ('serviceWorker' in navigator && SHOW_UPDATE_MODAL) {
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+        document.getElementById('updateModal').style.display = 'block';
+    });
+}
+</script>
+</body>
+</html>

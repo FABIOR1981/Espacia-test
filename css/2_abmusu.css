@@ -1,0 +1,211 @@
+/* =========================================
+   MODAL DE USUARIOS
+   ========================================= */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+}
+
+.modal-content {
+    background: var(--white);
+    padding: 30px;
+    border-radius: var(--radius);
+    width: 90%;
+    max-width: 600px;
+    box-shadow: var(--shadow-card, 0 15px 30px rgba(0,0,0,0.2));
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: var(--primary);
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 10px;
+}
+
+/* =========================================
+   ABM USUARIOS - DISEÑO PROFESIONAL
+   ========================================= */
+
+/* 1. CONTENEDOR PRINCIPAL (La "Tarjeta" blanca) */
+.abmusu-section {
+    background: var(--white);
+    padding: 30px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    max-width: 100%; /* Totalmente fluido */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    margin: 20px auto;
+    border: 1px solid var(--border);
+    overflow: hidden; /* Evita que el contenido desborde el borde redondeado */
+}
+
+/* Contenedor responsivo para la tabla */
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Títulos base si hicieran falta */
+.abmusu-section h2 {
+    margin-bottom: 25px;
+}
+
+/* 2. EL FORMULARIO (GRID DINÁMICO) */
+/* Usamos !important en algunos casos para ganar a los estilos inline del JS */
+.abmusu-form {
+    display: grid !important; 
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+    gap: 20px !important;
+    max-width: 100% !important; /* Ignora el max-width: 600px del JS */
+    background: var(--bg-zebra);
+    padding: 25px;
+    border-radius: var(--radius);
+    margin-bottom: 40px;
+}
+
+/* Estilo de los grupos (Labels + Inputs) */
+.abmusu-form div {
+    display: flex;
+    flex-direction: column;
+}
+
+.abmusu-form label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+/* Estilo de Inputs y Selects */
+.abmusu-form input, 
+.abmusu-form select {
+    width: 100% !important; /* Ignora el max-width manual del JS */
+    max-width: 100% !important;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn, 6px);
+    font-size: 0.95rem;
+    background-color: var(--white);
+    color: var(--text-main);
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.abmusu-form input:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* 3. BOTONES (Guardar y Cancelar) */
+/* El contenedor de botones al final */
+.abmusu-buttons-container {
+    grid-column: 1 / -1; /* Ocupa todo el ancho */
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+#guardar-btn {
+    background: var(--primary);
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: var(--radius-btn, 6px);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#guardar-btn:hover { background: var(--primary-hover, var(--primary)); opacity: 0.9; }
+
+#cancelar-btn {
+    background: var(--bg-zebra);
+    color: var(--text-muted);
+    padding: 12px 30px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn, 6px);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#cancelar-btn:hover { background: var(--border); }
+
+/* 4. LA TABLA (Basada en tu captura de F12) */
+#usuarios-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+#usuarios-table thead th {
+    background-color: var(--bg-zebra);
+    color: var(--text-muted);
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+}
+
+#usuarios-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+    color: var(--text-main);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Efecto cebra para la tabla */
+#usuarios-table tbody tr:nth-child(even) {
+    background-color: var(--bg-zebra);
+}
+
+/* Botones dentro de la tabla más compactos */
+#usuarios-table button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    border-radius: var(--radius-btn, 4px);
+    cursor: pointer;
+    margin-right: 4px;
+    border: none;
+    background-color: var(--primary);
+    color: white;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+#usuarios-table button[data-edit]:hover {
+    opacity: 0.9;
+}
+
+#usuarios-table button[data-baja]:hover {
+    opacity: 0.9;
+}

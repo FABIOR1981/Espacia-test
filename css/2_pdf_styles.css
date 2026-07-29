@@ -1,0 +1,126 @@
+/* ==========================================================================
+   ESPACIA - SISTEMA DE IMPRESIÓN PROFESIONAL (2_pdf_styles.css)
+   ========================================================================== */
+
+/* Este archivo optimiza la visualización para generar PDFs 
+   o imprimir directamente desde el navegador. 
+*/
+
+@media print {
+    /* 1. Reset General para Papel */
+    @page {
+        size: A4 portrait;
+        margin: 15mm;
+    }
+
+    body {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 11pt;
+    }
+
+    /* 2. Ocultar Elementos de Interfaz (No necesarios en un PDF) */
+    header, 
+    nav, 
+    .btn-menu, 
+    .informe-form, 
+    .pagination, 
+    .no-print,
+    #sidebar,
+    footer {
+        display: none !important;
+    }
+
+    /* 3. Ajuste de Contenedores */
+    .informe-container {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+
+    /* 4. Scorecards en Impresión */
+    .scorecard-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 30px !important;
+        grid-template-columns: none !important; /* Forzamos flex para evitar bugs de grid en PDF */
+    }
+
+    .card-stat {
+        flex: 1;
+        border: 1px solid #eee !important;
+        background: #f9f9f9 !important; /* Fondo gris muy tenue para ahorrar tinta */
+        color: #333 !important;
+        box-shadow: none !important;
+        border-radius: 8px !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        min-height: auto !important;
+        padding: 10px !important;
+    }
+
+    .card-stat-time {
+        color: #000 !important;
+        font-size: 1.8rem !important;
+    }
+
+    .card-stat-title {
+        color: #555 !important;
+        font-size: 0.9rem !important;
+    }
+
+    .card-stat-desglose {
+        border-left: 1px solid #ccc !important;
+        color: #666 !important;
+    }
+
+    /* 5. Tabla de Datos Profesional */
+    .table-main-container {
+        border: none !important;
+        overflow: visible !important;
+    }
+
+    .custom-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin-top: 20px;
+    }
+
+    .custom-table th {
+        background-color: #f2f2f2 !important;
+        color: #000 !important;
+        border-bottom: 2px solid #333 !important;
+        /* Corrección de compatibilidad sugerida por VSC */
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact;
+    }
+
+    .custom-table td {
+        border-bottom: 1px solid #eee !important;
+        padding: 8px !important;
+    }
+
+    /* 6. Badges de Estado (Simplificados para BN) */
+    .status-badge {
+        border: 1px solid #ccc !important;
+        background: transparent !important;
+        color: #000 !important;
+        text-transform: uppercase;
+        font-size: 8pt !important;
+    }
+
+    /* 7. Pie de página del informe */
+    .informe-container::after {
+        content: "Informe generado por ESPACIA Management System - Propiedad de TechFaro";
+        display: block;
+        text-align: center;
+        font-size: 9pt;
+        color: #aaa;
+        margin-top: 50px;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+    }
+}
